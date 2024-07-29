@@ -1,0 +1,236 @@
+<%- include('../partials/header.ejs')%>
+<div class = "filter">
+<form class = "filterForm" method = "POST" action = "/exercises/AllExercises">
+    <br><h2 class = "heading">Filter workouts</h2>
+
+    <br><label for = "equipment" class = "label">Equipment:</label>
+    <input type = "text" name="equipment" class = "label"><br><br> 
+
+    <label for = "target" class = "label">Target Muscle:</label>
+    <input type = "text" name="target" class = "label" > <br><br>
+
+    <button class= "submit">Submit Filter</button><br><br>
+</form>
+<form class = "filterForm" method = "POST" action = "/exercises/allExercises/removeFilter">
+    <button class = "submit">Clear Filter</button>
+
+</form></div>
+<%if(filterBody)
+{
+    if("equipment" in filterBody)
+    {
+        if(filterBody.equipment != "")
+        {
+            %><br><h3 class = "equipment">Equipment: <%=filterBody.equipment%></h3><%
+        }
+    }
+    if("target" in filterBody)
+    {
+        %><h3 class = "equipment">Target Muscle: <%=filterBody.target%></h3><%
+    }
+    if("filter" in filterBody)
+    {
+        %><h3 class = "equipment3"><br>Page <%=filterBody.filter%></h3><%
+    }
+}
+    %><br><h1>Exercises!</h1><br>
+    <% if(filteredExerciseData1.length == 0){ 
+        counter = 0;
+         apiExerciseData.forEach(data=>{ 
+            counter = counter + 1;
+            if(counter < 100)
+            {%>
+                <div class = "apiData">
+                    <h1> Workout Name: <%= data.name %></h1>
+                    <h3> Body Part: <%= data.bodyPart %></h3>
+                    <h3> equipment: <%= data.equipment %></h3>
+                    <h3>graphic</h3>
+                    <img class = "image" src = "<%= data.gifUrl %>" height="150" width="150">
+                    <h3> Target Muscle: <%= data.target %></h3>
+                       <% if(user){
+                        if(!data.added)
+                        {
+                            %><form>
+                                <button class ="workoutButton"type = "submit" formmethod="POST" name = "userData" value ="<%=data.id%>" formaction="/exercises/userExercises">Add workout to Profile Page!</button>
+                            </form><%
+                        }
+                        else{
+                            %><h2>Workout added to profile page!</h2><%
+                        }
+                       }%>
+
+                </div>
+            <%}
+         })
+    } else{ 
+        counter = 0;
+         filteredExerciseData1.forEach(data=>{ 
+            counter = counter + 1;
+            if(counter < 100){ %>
+                <div class = "apiData">
+                    <h1> Workout Name: <%= data.name %></h1>
+                    <h3> Body Part: <%= data.bodyPart %></h3>
+                    <h3> equipment: <%= data.equipment %></h3>
+        
+                    <h3>graphic</h3>
+                    <img class = "image" src = "<%= data.gifUrl %>" height="150" width="150">
+                    <h3> Target Muscle: <%= data.target %></h3>
+                    <%if(user){
+                        if(!data.added)
+                        {
+                            %><form>
+                                <button class ="workoutButton"type = "submit" formmethod="POST" name = "userData" value ="<%=data.id%>" formaction="/exercises/userExercises">Add workout to Profile Page!</button>
+                            </form><%
+                        }
+                        else{
+                            %><h2>Workout added to profile page!</h2><%
+                        }
+                    }%>
+                </div>
+            <%}
+         }) %>
+    <% } %>
+<div class = "outer">
+    <form method="POST" action = "/exercises/AllExercises">
+        <div class = "inner">
+        <%for(let i =0; i < filteredDataLength; i ++){
+            %><button class = "page" name = "filter" value = "<%=i+1%>"><%=i +1%></button><%
+        }%>
+        </div>
+    </form>
+</div>
+<%- include('../partials/footer.ejs')%>
+<style>
+    .filterForm.label{
+        width: 100%;
+    }
+    .filter{
+        border: 1px solid black;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+.outer
+{
+    width:100%;
+    text-align: center;
+}
+.inner
+{
+    font-size: 30px;
+    display: inline-block;
+}
+.center {
+  margin: auto;
+  width: 60%;
+  border: 3px solid #73AD21;
+  padding: 10px;
+}
+    .equipment{
+        text-align: center;
+    }
+    .workoutButton{
+        background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+.equipment3   {
+    text-decoration: underline;
+    text-align: center;
+}
+.apiData{
+    display: inline-block;
+    vertical-align: middle;
+    margin: auto;
+  width: 25%;
+  padding: 10px;
+    border: 1px solid black
+
+}
+.filterForm{
+    display: block;
+    text-align: center;
+}
+.graphic{
+
+    top: 50px;
+}
+.image{
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+    header{
+        font-family: sans-serif;
+        text-align: center;
+        color: #424240;
+        font-weight: bold;
+        border:10px solid #4CAF50;
+        background-color: #BAD2EC;
+    
+            
+            
+    }
+    footer{
+        color: #424240;
+        font-family: sans-serif;
+        bottom:0;
+        width:100%;
+        height:70px;   /* Height of the footer */
+        background:#BAD2EC;
+        text-align: center;
+        border: 10px solid #4CAF50;
+
+    }
+    h1, h2, h3
+    {
+        text-align: center;
+    }
+    nav
+    {
+        font-family: sans-serif;
+        text-align: center;
+        font-weight: bold;
+        font-size: 110%
+        
+    }
+    a
+    {
+        text-decoration: none;
+        color: #030c02;
+    }
+    a:hover
+    {
+        text-decoration: overline underline;
+    }
+    .heading{
+        text-decoration: underline;
+    }
+    .submit{
+        border: 5px solid white;
+        background-color: #4CAF50;
+        color:white;
+        padding: 15px 32px;
+
+    }
+    .page{
+        border: 5px solid white;
+        background-color: #4CAF50;
+        color:white;
+        padding: 15px 32px;
+    }
+    .label{
+        margin: auto;
+        padding: 10px;
+    }
+
+    </style>
+    
